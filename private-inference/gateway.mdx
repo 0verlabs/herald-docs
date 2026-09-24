@@ -33,7 +33,7 @@ The facilitator sponsors gas for the Permit2 approval, so your wallet only needs
 
 ## Quickstart
 
-The full working client example is at [0verlabs/herald-gateway-example](https://github.com/0verlabs/herald-gateway-example).
+The full working client example is at [0verlabs/herald-gateway-example](https://github.com/0verlabs/herald-gateway-example) (This example uses Bun)
 
 <Steps>
   <Step title="Install dependencies">
@@ -51,20 +51,31 @@ The full working client example is at [0verlabs/herald-gateway-example](https://
     ```
   </Step>
   <Step title="Wrap fetch and call the gateway">
-    ```typescript client.ts
+    ```typescript index.ts
     import { x402Client } from "@x402/core/client";
+    import { toClientEvmSigner } from "@x402/evm";
     import { UptoEvmScheme } from "@x402/evm/upto/client";
     import { wrapFetchWithPayment } from "@x402/fetch";
+    import { createPublicClient, http } from "viem";
     import { privateKeyToAccount } from "viem/accounts";
+    import { base } from "viem/chains";
 
     // Create signer
     const signer = privateKeyToAccount(
       process.env.EVM_PRIVATE_KEY as `0x${string}`,
     );
 
+    const publicClient = createPublicClient({
+     	chain: base,
+     	transport: http(),
+    });
+    
+    const evmSigner = toClientEvmSigner(signer, publicClient);
+
     // Create x402 client and register EVM scheme
     const client = new x402Client();
-    client.register("eip155:8453", new UptoEvmScheme(signer));
+    client.setSpendControls(false); // set your spend controls, false to disable
+    client.register("eip155:8453", new UptoEvmScheme(evmSigner));
 
     // Wrap fetch with payment handling
     const fetchWithPayment = wrapFetchWithPayment(fetch, client);
@@ -93,7 +104,7 @@ The full working client example is at [0verlabs/herald-gateway-example](https://
   </Step>
   <Step title="Run">
     ```sh
-    npm run client.ts
+    bun run src/index.ts
     ```
 
     The first 402 round trip happens behind `wrapFetchWithPayment`. Your code only sees the final response.
