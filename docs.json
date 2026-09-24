@@ -20,7 +20,23 @@
 		"pages": [
 			{
 				"group": "Welcome",
-				"pages": ["introduction"]
+				"pages": ["introduction", "faq", "architecture"]
+			},
+			{
+				"group": "Network",
+				"pages": ["network/overview"]
+			},
+			{
+				"group": "Wallet",
+				"pages": ["wallet/overview"]
+			},
+			{
+				"group": "Rails",
+				"pages": ["rails/direct", "rails/escrow"]
+			},
+			{
+				"group": "Private Inference",
+				"pages": ["private-inference/gateway"]
 			}
 		],
 		"global": {
