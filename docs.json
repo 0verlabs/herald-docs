@@ -28,6 +28,9 @@
 		"light": "#c596fa",
 		"dark": "#5c16c9"
 	},
+	"background": {
+		"decoration": "gradient"
+	},
 	"favicon": "/favicon.svg",
 	"fonts": {
 		"heading": {
